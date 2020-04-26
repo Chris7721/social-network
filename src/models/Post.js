@@ -3,9 +3,15 @@ const validator = require('validator')
 const postSchema = new mongoose.Schema( {
                 article: {
                     type: String,
+                    minlength: 20,
                 },
                 giphy:{
-                    type: Buffer
+                    type: String,
+                    minlength: 10,
+                },
+                title:{
+                    type: String,
+                    minlength: 3,
                 },
                 owner:{
                     type: mongoose.Schema.Types.ObjectId,
