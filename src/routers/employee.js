@@ -1,8 +1,12 @@
 const express = require('express')
 const Employee = require('../models/Employee')
 const admin = require('../middleware/admin')
-const cloudinary = require('cloudinary');
+// const auth = require('../middleware/auth')
 const router = new express.Router()
+
+
+
+
 
 // create new admin
 router.post('/employees/admin', (req, res)=>{
@@ -47,6 +51,7 @@ router.post('/auth/signin', async (req, res)=>{
     
 })
 
-router.post()
 
+
+// cloudinary.uploader.upload("sample.jpg", {"crop":"limit","tags":"samples","width":3000,"height":2000}, function(result) { console.log(result) });
 module.exports = router
