@@ -45,6 +45,12 @@ const employeeSchema = new mongoose.Schema(
     {timestamps: true}
 )
 
+employeeSchema.virtual('posts', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 employeeSchema.methods.generateAuthToken = async function(){
     const employee = this;
     console.log("fetching token")
@@ -53,6 +59,14 @@ employeeSchema.methods.generateAuthToken = async function(){
     employee.save()
     return token
 
+}
+
+employeeSchema.methods.toJSON = function(){
+    const employee = this
+    const employeeObject = employee.toObject();
+    delete employeeObject.password
+    delete employeeObject.tokens
+    return employeeObject
 }
 
 employeeSchema.pre('save', async function(next){
