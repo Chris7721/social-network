@@ -7,6 +7,6 @@ const cloudinaryConfig = (req,res, next)=>{
         api_secret: process.env.CLOUDINARY_API_SECRET
       });
     next()
-}
+} 
 
 module.exports = {cloudinaryConfig, uploader: cloudinary.uploader }
