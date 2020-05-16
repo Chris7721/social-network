@@ -1,10 +1,8 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const likesSchema = require('./Like')
+const Comment = require('./Comment')
 const postSchema = new mongoose.Schema( {
-                article: {
-                    type: String,
-                    minlength: 20,
-                },
                 giphy:{
                     type: String,
                     minlength: 10,
@@ -18,7 +16,35 @@ const postSchema = new mongoose.Schema( {
                     required: true,
                     ref: 'Employee'
                 }
-            }, {timestamps: true})
+            }, {timestamps: true, toJSON: { virtuals: true }})
+
+            postSchema.virtual('commentsCount', {
+                ref: 'Comment',
+                localField: '_id',
+                foreignField: 'post',
+                count: true
+            })
+            postSchema.virtual('comments', {
+                ref: 'Comment',
+                localField: '_id',
+                foreignField: 'post',
+            })
+            postSchema.virtual('likesCount', {
+                ref: 'Like',
+                localField: '_id',
+                foreignField: 'post',
+                count: true
+            })
+            postSchema.virtual('likes', {
+                ref: 'Like',
+                localField: '_id',
+                foreignField: 'post'
+            })
+            // employeeSchema.virtual('posts', {
+            //     ref: 'Post',
+            //     localField: '_id',
+            //     foreignField: 'owner'
+            // })
 
 const Post = mongoose.model('Post', postSchema)
 module.exports = Post
