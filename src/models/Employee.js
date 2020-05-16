@@ -15,6 +15,7 @@ const employeeSchema = new mongoose.Schema(
             unique: true,
             required: true,
             trim: true,
+            lowercase: true,
             validate(value){
                 if(!validator.isEmail(value)){
                     throw new Error("Email is invalid")
@@ -86,12 +87,11 @@ employeeSchema.pre('remove', async function(next){
 employeeSchema.statics.findByCredentials = async (email, password)=>{
     const employee = await Employee.findOne({email})
     if(!employee){
-        console.log("lol")
+        console.log("email not found")
         throw new Error("username or password incorrect")
     }
-    const passwordMatch = bcrypt.compare(password, employee.password)
+    const passwordMatch = await bcrypt.compare(password, employee.password)
     if(!passwordMatch){
-        console.log("lol")
         throw new Error("username or password incorrect")
     }
     return employee
