@@ -10,3 +10,4 @@ const cloudinaryConfig = (req,res, next)=>{
 } 
 
 module.exports = {cloudinaryConfig, uploader: cloudinary.uploader }
+ 
