@@ -102,7 +102,7 @@ router.get("/gifs/:id", async (req, res)=>{
 //get all gifs
 router.get("/feed", auth, async (req, res)=>{
     try{
-       const post = await Post.find().sort({ createdAt: -1 }).limit(parseInt(req.query.limit)).skip(parseInt(req.query.skip)).populate('owner').populate({
+       const post = await Post.find().sort({ createdAt: req.query.limit == 15 ? 1 : -1 }).limit(parseInt(req.query.limit)).skip(parseInt(req.query.skip)).populate('owner').populate({
            path:'comments',
            options: {
                limit: 3,
