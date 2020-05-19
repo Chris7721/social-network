@@ -113,13 +113,18 @@ router.get("/feed", auth, async (req, res)=>{
         }).populate('commentsCount')
         .populate({
             path:'likes',
-            limit: 3
+            options: {
+                limit: 6,
+                sort: {
+                    createdAt: -1
+                }
+            }
         }).populate('likesCount')
         .exec()
        if(!post){
         return res.status(401).send({success: "false", message: "post doesn't exist anymore"})
        }
-        res.send({...post, commentLength: post.comments}) 
+        res.send({...post}) 
     }
     catch(err){
         res.status(401).send({success: "false", message: err})
