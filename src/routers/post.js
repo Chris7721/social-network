@@ -1,5 +1,6 @@
 const express = require('express')
 const Post = require('../models/Post')
+const Like = require('../models/Like')
 const Comment = require('../models/Comment')
 const {uploader} = require('../middleware/cloudinary')
 const {upload, imagePath} = require('../middleware/multer')
@@ -124,7 +125,9 @@ router.get("/feed", auth, async (req, res)=>{
        if(!post){
         return res.status(401).send({success: "false", message: "post doesn't exist anymore"})
        }
-        res.send({...post}) 
+       const result =  post.map(p => p.toObject());
+        await Post.asyncForEach(result, req.employee._id);
+        res.send([...result])
     }
     catch(err){
         res.status(401).send({success: "false", message: err})

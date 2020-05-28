@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-const likesSchema = require('./Like')
+const Like = require('./Like')
 const Comment = require('./Comment')
 const postSchema = new mongoose.Schema( {
                 giphy:{
@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema( {
                     required: true,
                     ref: 'Employee'
                 }
-            }, {timestamps: true, toJSON: { virtuals: true }})
+            }, {timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true }})
 
             postSchema.virtual('commentsCount', {
                 ref: 'Comment',
@@ -40,11 +40,14 @@ const postSchema = new mongoose.Schema( {
                 localField: '_id',
                 foreignField: 'post'
             })
-            // employeeSchema.virtual('posts', {
-            //     ref: 'Post',
-            //     localField: '_id',
-            //     foreignField: 'owner'
-            // })
+
+            postSchema.statics.asyncForEach = async (array, user_id)=> {
+                for (let index of array) {
+                    let isLiked = await Like.find({post: index._id, user_id});
+                    index.isLiked = index.likes.some(el => el.user_id == user_id.toString()) ? true : false
+                }
+                return array
+              }
 
 const Post = mongoose.model('Post', postSchema)
 module.exports = Post
