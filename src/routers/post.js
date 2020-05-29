@@ -71,8 +71,12 @@ router.patch("/gifs/:id", auth, upload, async (req, res)=>{
 
 
 // get a gif
-router.get("/gifs/:id", async (req, res)=>{
+router.post("/gifs/:id", async (req, res)=>{
     try{
+        console.log(req.body)
+        //problem: get isLiked on singlePost page
+        const isLiked = await Like.findOne({post: req.params.id, user_id: req.body.user_id });
+        // console.log(isLiked)
        const post = await Post.findOne({_id: req.params.id}).populate('owner').populate({
         path:'comments',
         options: {
@@ -92,7 +96,10 @@ router.get("/gifs/:id", async (req, res)=>{
        if(!post){
         return res.status(401).send({success: "false", message: "post doesn't exist anymore"})
        }
-        res.send(post) 
+       const result = post.toObject();
+       result.isLiked = isLiked ? true : false
+    //    console.log(result)
+        res.send(result) 
     }
     catch(err){
         res.status(401).send({success: "false", message: err})
