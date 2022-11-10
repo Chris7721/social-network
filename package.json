@@ -40,6 +40,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "jest": "^26.0.1",
-    "mocha": "^7.2.0"
+    "mocha": "^10.1.0"
   }
 }
